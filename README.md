@@ -1,155 +1,157 @@
-# AI Website Cloner Template
+# AI 網站克隆模板
 
 <a href="https://github.com/JCodesMore/ai-website-cloner-template/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a> <a href="https://github.com/JCodesMore/ai-website-cloner-template/stargazers"><img src="https://img.shields.io/github/stars/JCodesMore/ai-website-cloner-template?style=flat" alt="Stars" /></a> <a href="https://discord.gg/hrTSX5yTpB"><img src="https://img.shields.io/discord/1400896964597383279?label=discord" alt="Discord" /></a>
 
-A reusable template for reverse-engineering any website into a clean, modern Next.js codebase using AI coding agents. 
+[English](./README.en.md) | 繁體中文
 
-**Recommended: [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with Opus 4.7 for best results** — but works with a variety of AI coding agents.
+一個可重複使用的模板，透過 AI 編碼代理將任何網站逆向工程成乾淨、現代的 Next.js 程式碼庫。
 
-Point it at a URL, run `/clone-website`, and your AI agent will inspect the site, extract design tokens and assets, write component specs, and dispatch parallel builders to reconstruct every section.
+**推薦使用 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 搭配 Opus 4.7 以獲得最佳效果** —— 但也支援多種 AI 編碼代理。
 
-## Demo
+只需指向一個 URL，執行 `/clone-website`,你的 AI 代理就會檢查網站、提取設計 token 與資源、撰寫元件規格,並派遣並行的 builder 重建每個區塊。
 
-[![Watch the demo](docs/design-references/comparison.png)](https://youtu.be/O669pVZ_qr0)
+## 示範
 
-> Click the image above to watch the full demo on YouTube.
+[![觀看示範](docs/design-references/comparison.png)](https://youtu.be/O669pVZ_qr0)
 
-## Quick Start
+> 點擊上方圖片觀看 YouTube 完整示範。
 
-1. **Clone this repository**
+## 快速開始
+
+1. **Clone 此 repo**
    ```bash
    git clone https://github.com/JCodesMore/ai-website-cloner-template.git my-clone
    cd my-clone
    ```
-2. **Install dependencies**
+2. **安裝相依套件**
    ```bash
    npm install
    ```
-3. **Start your AI agent** — Claude Code recommended:
+3. **啟動你的 AI 代理** —— 推薦使用 Claude Code：
    ```bash
    claude --chrome
    ```
-4. **Run the skill**:
+4. **執行 skill**：
    ```
-   /clone-website <target-url1> [<target-url2> ...]
+   /clone-website <目標網址1> [<目標網址2> ...]
    ```
-5. **Customize** (optional) — after the base clone is built, modify as needed
+5. **客製化** (選用) —— 基礎克隆完成後,依需求修改
 
-> Using a different agent? Open `AGENTS.md` for project instructions — most agents pick it up automatically.
+> 使用其他代理？開啟 `AGENTS.md` 查看專案說明 —— 多數代理會自動讀取。
 
-## Supported Platforms
+## 支援的平台
 
-| Agent                                                         | Status                     |
+| 代理                                                          | 狀態                       |
 | ------------------------------------------------------------- | -------------------------- |
-| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | **Recommended** — Opus 4.7 |
-| [Codex CLI](https://github.com/openai/codex)                  | Supported                  |
-| [OpenCode](https://opencode.ai/)                              | Supported                  |
-| [GitHub Copilot](https://github.com/features/copilot)         | Supported                  |
-| [Cursor](https://cursor.com/)                                 | Supported                  |
-| [Windsurf](https://codeium.com/windsurf)                      | Supported                  |
-| [Gemini CLI](https://github.com/google-gemini/gemini-cli)     | Supported                  |
-| [Cline](https://github.com/cline/cline)                       | Supported                  |
-| [Roo Code](https://github.com/RooCodeInc/Roo-Code)            | Supported                  |
-| [Continue](https://continue.dev/)                             | Supported                  |
-| [Amazon Q](https://aws.amazon.com/q/developer/)               | Supported                  |
-| [Augment Code](https://www.augmentcode.com/)                  | Supported                  |
-| [Aider](https://aider.chat/)                                  | Supported                  |
+| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | **推薦** —— Opus 4.7       |
+| [Codex CLI](https://github.com/openai/codex)                  | 支援                       |
+| [OpenCode](https://opencode.ai/)                              | 支援                       |
+| [GitHub Copilot](https://github.com/features/copilot)         | 支援                       |
+| [Cursor](https://cursor.com/)                                 | 支援                       |
+| [Windsurf](https://codeium.com/windsurf)                      | 支援                       |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli)     | 支援                       |
+| [Cline](https://github.com/cline/cline)                       | 支援                       |
+| [Roo Code](https://github.com/RooCodeInc/Roo-Code)            | 支援                       |
+| [Continue](https://continue.dev/)                             | 支援                       |
+| [Amazon Q](https://aws.amazon.com/q/developer/)               | 支援                       |
+| [Augment Code](https://www.augmentcode.com/)                  | 支援                       |
+| [Aider](https://aider.chat/)                                  | 支援                       |
 
-## Prerequisites
+## 環境需求
 
 - [Node.js](https://nodejs.org/) 24+
-- An AI coding agent (see [Supported Platforms](#supported-platforms))
+- 一個 AI 編碼代理 (見[支援的平台](#支援的平台))
 
-## Tech Stack
+## 技術棧
 
-- **Next.js 16** — App Router, React 19, TypeScript strict
-- **shadcn/ui** — Radix primitives + Tailwind CSS v4
-- **Tailwind CSS v4** — oklch design tokens
-- **Lucide React** — default icons (replaced by extracted SVGs during cloning)
+- **Next.js 16** —— App Router、React 19、TypeScript strict
+- **shadcn/ui** —— Radix primitives + Tailwind CSS v4
+- **Tailwind CSS v4** —— oklch 設計 token
+- **Lucide React** —— 預設圖示 (克隆過程中會被提取的 SVG 取代)
 
-## How It Works
+## 運作原理
 
-The `/clone-website` skill runs a multi-phase pipeline:
+`/clone-website` skill 執行多階段流程：
 
-1. **Reconnaissance** — screenshots, design token extraction, interaction sweep (scroll, click, hover, responsive)
-2. **Foundation** — updates fonts, colors, globals, downloads all assets
-3. **Component Specs** — writes detailed spec files (`docs/research/components/`) with exact computed CSS values, states, behaviors, and content
-4. **Parallel Build** — dispatches builder agents in git worktrees, one per section/component
-5. **Assembly & QA** — merges worktrees, wires up the page, runs visual diff against the original
+1. **偵察 (Reconnaissance)** —— 截圖、提取設計 token、互動掃描 (捲動、點擊、hover、響應式)
+2. **基礎 (Foundation)** —— 更新字型、顏色、globals,下載所有資源
+3. **元件規格 (Component Specs)** —— 在 `docs/research/components/` 撰寫詳細規格檔,包含精確的 computed CSS 值、狀態、行為與內容
+4. **並行建構 (Parallel Build)** —— 在 git worktree 中派遣 builder 代理,每個區塊/元件一個
+5. **組裝與 QA** —— 合併 worktree、組裝頁面,並與原始網站進行視覺 diff
 
-Each builder agent receives the full component specification inline — exact `getComputedStyle()` values, interaction models, multi-state content, responsive breakpoints, and asset paths. No guessing.
+每個 builder 代理會直接收到完整的元件規格 —— 精確的 `getComputedStyle()` 數值、互動模型、多狀態內容、響應式斷點與資源路徑。不需要猜測。
 
-## Use Cases
+## 使用場景
 
-- **Platform migration** — rebuild a site you own from WordPress/Webflow/Squarespace into a modern Next.js codebase
-- **Lost source code** — your site is live but the repo is gone, the developer left, or the stack is legacy. Get the code back in a modern format
-- **Learning** — deconstruct how production sites achieve specific layouts, animations, and responsive behavior by working with real code
+- **平台遷移** —— 將你擁有的網站從 WordPress/Webflow/Squarespace 重建為現代 Next.js 程式碼庫
+- **失落的原始碼** —— 網站還在線上但 repo 不見了、原開發者離開了、或技術棧過於老舊。用現代格式拿回程式碼
+- **學習** —— 透過真實程式碼解構正式網站如何達成特定排版、動畫與響應式行為
 
-## Not Intended For
+## 不適用於
 
-- **Phishing or impersonation** — this project must not be used for deceptive purposes, impersonation, or any activity that breaks the law.
-- **Passing off someone's design as your own** — logos, brand assets, and original copy belong to their owners.
-- **Violating terms of service** — some sites explicitly prohibit scraping or reproduction. Check first.
+- **釣魚或冒充** —— 本專案不可用於詐欺、冒充或任何違法用途
+- **將他人設計據為己有** —— Logo、品牌資源、原創文案皆歸原所有者
+- **違反服務條款** —— 部分網站明文禁止爬取或重製,請先確認
 
-## Project Structure
+## 專案結構
 
 ```
 src/
-  app/              # Next.js routes
-  components/       # React components
-    ui/             # shadcn/ui primitives
-    icons.tsx       # Extracted SVG icons
-  lib/utils.ts      # cn() utility
-  types/            # TypeScript interfaces
-  hooks/            # Custom React hooks
+  app/              # Next.js 路由
+  components/       # React 元件
+    ui/             # shadcn/ui 原語
+    icons.tsx       # 提取的 SVG 圖示
+  lib/utils.ts      # cn() 工具
+  types/            # TypeScript 介面
+  hooks/            # 自訂 React hooks
 public/
-  images/           # Downloaded images from target
-  videos/           # Downloaded videos from target
-  seo/              # Favicons, OG images
+  images/           # 從目標下載的圖片
+  videos/           # 從目標下載的影片
+  seo/              # Favicon、OG 圖片
 docs/
-  research/         # Extraction output & component specs
-  design-references/ # Screenshots
+  research/         # 提取輸出與元件規格
+  design-references/ # 截圖
 scripts/
-  sync-agent-rules.sh  # Regenerate agent instruction files
-  sync-skills.mjs      # Regenerate /clone-website for all platforms
-AGENTS.md           # Agent instructions (single source of truth)
-CLAUDE.md           # Claude Code config (imports AGENTS.md)
-GEMINI.md           # Gemini CLI config (imports AGENTS.md)
+  sync-agent-rules.sh  # 重新產生代理說明檔
+  sync-skills.mjs      # 為所有平台重新產生 /clone-website
+AGENTS.md           # 代理說明 (唯一真實來源)
+CLAUDE.md           # Claude Code 設定 (引用 AGENTS.md)
+GEMINI.md           # Gemini CLI 設定 (引用 AGENTS.md)
 ```
 
-## Commands
+## 指令
 
 ```bash
-npm run dev    # Start dev server
-npm run build  # Production build
-npm run lint   # ESLint check
-npm run typecheck # TypeScript check
-npm run check  # Run lint + typecheck + build
+npm run dev    # 啟動開發伺服器
+npm run build  # 正式環境建置
+npm run lint   # ESLint 檢查
+npm run typecheck # TypeScript 檢查
+npm run check  # 執行 lint + typecheck + build
 ```
 
-### If using docker
+### 使用 Docker
 
 ```bash
-docker compose up app --build # build and run the app
-docker compose up dev --build # run the app in dev mode on port 3001
+docker compose up app --build # 建置並執行 app
+docker compose up dev --build # 以開發模式在 port 3001 執行
 ```
 
-## Updating for Other Platforms
+## 為其他平台更新
 
-Two source-of-truth files power all platform support. Edit the source, then run the sync script:
+兩個唯一真實來源檔案驅動所有平台支援。編輯來源後,執行同步腳本：
 
-| What                   | Source of truth                         | Sync command                       |
+| 項目                   | 唯一真實來源                            | 同步指令                           |
 | ---------------------- | --------------------------------------- | ---------------------------------- |
-| Project instructions   | `AGENTS.md`                             | `bash scripts/sync-agent-rules.sh` |
+| 專案說明               | `AGENTS.md`                             | `bash scripts/sync-agent-rules.sh` |
 | `/clone-website` skill | `.claude/skills/clone-website/SKILL.md` | `node scripts/sync-skills.mjs`     |
 
-Each script regenerates the platform-specific copies automatically. Agents that read the source files natively need no regeneration.
+每個腳本會自動重新產生平台特定的副本。原生讀取來源檔案的代理不需要重新產生。
 
 
-## Star History
+## Star 歷史
 
 [![Star History Chart](https://api.star-history.com/svg?repos=JCodesMore/ai-website-cloner-template&type=Date)](https://star-history.com/#JCodesMore/ai-website-cloner-template&Date)
 
-## License
+## 授權
 
 MIT
