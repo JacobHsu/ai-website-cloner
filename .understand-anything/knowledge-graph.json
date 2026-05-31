@@ -1,0 +1,1530 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "ai-website-clone-template",
+    "languages": [
+      "css",
+      "dockerfile",
+      "javascript",
+      "json",
+      "markdown",
+      "mdc",
+      "shell",
+      "toml",
+      "typescript",
+      "yaml"
+    ],
+    "frameworks": [
+      "Next.js",
+      "React",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "ESLint",
+      "Docker",
+      "Docker Compose",
+      "GitHub Actions"
+    ],
+    "description": "一個可重複使用的 Next.js 模板，透過 AI 編碼代理將任何網站逆向工程成乾淨、現代的程式碼庫；其核心特色是將單一正規 skill／指令來源同步散佈至約十個 AI 代理平台。",
+    "analyzedAt": "2026-05-31T15:29:21.847Z",
+    "gitCommitHash": "eae45317c5cb7e6945cce87f14b401c43e74616d"
+  },
+  "nodes": [
+    {
+      "id": "service:.dockerignore",
+      "type": "service",
+      "name": ".dockerignore",
+      "filePath": ".dockerignore",
+      "summary": "Docker 建置上下文排除清單，過濾掉 node_modules、.next、.git、環境變數檔與本機暫存檔，避免將不必要或敏感的檔案複製進映像建置流程。",
+      "tags": [
+        "containerization",
+        "infrastructure",
+        "build-system",
+        "configuration"
+      ],
+      "complexity": "simple",
+      "languageNotes": "排除 .env 類檔案可防止密鑰意外被打包進 Docker 映像層。"
+    },
+    {
+      "id": "service:docker-compose.yml",
+      "type": "service",
+      "name": "docker-compose.yml",
+      "filePath": "docker-compose.yml",
+      "summary": "定義 app（正式環境，使用 Dockerfile 的 runner 階段）與 dev（開發環境，掛載原始碼 volume 熱重載）兩個服務，皆設定埠對應、env_file 與 wget 健康檢查。",
+      "tags": [
+        "orchestration",
+        "infrastructure",
+        "deployment",
+        "containerization"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "dev 服務使用 anonymous volume（/app/node_modules、/app/.next）覆蓋掉 bind mount，避免主機端覆寫容器內已安裝的相依套件。"
+    },
+    {
+      "id": "service:Dockerfile:dependencies",
+      "type": "service",
+      "name": "dependencies",
+      "filePath": "Dockerfile",
+      "summary": "多階段建置的第一階段，僅複製套件清單並透過 npm cache mount 安裝相依套件，產出可供後續階段重用的 node_modules。",
+      "tags": [
+        "containerization",
+        "build-system",
+        "infrastructure"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "service:Dockerfile:builder",
+      "type": "service",
+      "name": "builder",
+      "filePath": "Dockerfile",
+      "summary": "建置階段，重用 dependencies 階段的 node_modules、複製完整原始碼並在 NODE_ENV=production 下執行 Next.js 建置以產生 standalone 輸出。",
+      "tags": [
+        "containerization",
+        "build-system",
+        "infrastructure",
+        "deployment"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "service:Dockerfile:runner",
+      "type": "service",
+      "name": "runner",
+      "filePath": "Dockerfile",
+      "summary": "最終執行階段，從 builder 複製 standalone 與 static 產物、以非 root 的 node 使用者執行，暴露 3000 埠並以 node server.js 啟動 Next.js 應用。",
+      "tags": [
+        "containerization",
+        "deployment",
+        "infrastructure",
+        "security"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "切換至非 root 的 node 使用者並對 .next 與複製產物設定 chown，符合最小權限的容器安全實務。"
+    },
+    {
+      "id": "service:Dockerfile",
+      "type": "service",
+      "name": "Dockerfile",
+      "filePath": "Dockerfile",
+      "summary": "Next.js 應用的多階段 Docker 建置，分為 dependencies、builder、runner 三階段，產出精簡且以非 root 使用者執行的正式環境映像，並暴露 3000 埠。",
+      "tags": [
+        "containerization",
+        "infrastructure",
+        "deployment",
+        "build-system"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "採用 multi-stage build 搭配 standalone 輸出與快取掛載，大幅縮減最終映像體積並加速重建。"
+    },
+    {
+      "id": "pipeline:.github/workflows/ci.yml",
+      "type": "pipeline",
+      "name": "ci.yml",
+      "filePath": ".github/workflows/ci.yml",
+      "summary": "GitHub Actions CI workflow，在 push 與 pull_request 至 master 分支時觸發，於 ubuntu-latest 上執行單一 quality job，依序進行 lint、typecheck 與 build 的品質檢查。",
+      "tags": [
+        "ci-cd",
+        "infrastructure",
+        "deployment",
+        "build-system",
+        "quality-gate"
+      ],
+      "complexity": "simple",
+      "languageNotes": "使用 actions/setup-node@v4 搭配 node-version 24 與 npm cache，並設定 15 分鐘 timeout 以避免 job 卡住；整體流程為 checkout → setup node → npm ci → lint → typecheck → build。"
+    },
+    {
+      "id": "config:.aider.conf.yml",
+      "type": "config",
+      "name": ".aider.conf.yml",
+      "filePath": ".aider.conf.yml",
+      "summary": "Aider AI 編碼工具的設定檔，指定 Aider 啟動時自動讀取 AGENTS.md 與 INSPECTION_GUIDE.md，使其共享專案的核心指引。",
+      "tags": [
+        "configuration",
+        "ai-tooling",
+        "aider"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:AGENTS.md",
+      "type": "document",
+      "name": "AGENTS.md",
+      "filePath": "AGENTS.md",
+      "summary": "AI 編碼代理的單一事實來源指引，定義網站反向工程模板的技術棧、指令、程式風格、設計原則與專案結構，並包含 Next.js 16 的重大變更警告。",
+      "tags": [
+        "documentation",
+        "entry-point",
+        "ai-agent",
+        "guidelines"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "以區段化 Markdown 作為代理指令載體，並透過 @ 語法引用 INSPECTION_GUIDE.md 達成內容組合。"
+    },
+    {
+      "id": "document:CHANGELOG.md",
+      "type": "document",
+      "name": "CHANGELOG.md",
+      "filePath": "CHANGELOG.md",
+      "summary": "遵循 Keep a Changelog 慣例的版本變更記錄，涵蓋 0.1.0 至 0.3.1 各版本的新增、變更、修正與移除項目。",
+      "tags": [
+        "documentation",
+        "changelog",
+        "versioning"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:CLAUDE.md",
+      "type": "document",
+      "name": "CLAUDE.md",
+      "filePath": "CLAUDE.md",
+      "summary": "單行指標檔，透過 @AGENTS.md 引用將 Claude Code 的指引導向事實來源 AGENTS.md。",
+      "tags": [
+        "documentation",
+        "pointer",
+        "ai-agent"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "service:Dockerfile.dev",
+      "type": "service",
+      "name": "Dockerfile.dev",
+      "filePath": "Dockerfile.dev",
+      "summary": "開發用 Docker 映像定義，基於 node:24-alpine 安裝相依套件、開放 3000 埠，並以開發模式 (npm run dev) 啟動 Next.js 服務。",
+      "tags": [
+        "containerization",
+        "infrastructure",
+        "development",
+        "nextjs"
+      ],
+      "complexity": "simple",
+      "languageNotes": "使用 alpine 輕量基底並停用 Next.js telemetry，專為本地開發熱重載設計。"
+    },
+    {
+      "id": "document:GEMINI.md",
+      "type": "document",
+      "name": "GEMINI.md",
+      "filePath": "GEMINI.md",
+      "summary": "單行指標檔，透過 @AGENTS.md 引用將 Gemini 代理的指引導向事實來源 AGENTS.md。",
+      "tags": [
+        "documentation",
+        "pointer",
+        "ai-agent"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:README.en.md",
+      "type": "document",
+      "name": "README.en.md",
+      "filePath": "README.en.md",
+      "summary": "英文版專案說明文件，涵蓋快速開始、支援平台、技術棧、運作原理、使用場景與專案結構等完整入門指引。",
+      "tags": [
+        "documentation",
+        "entry-point",
+        "overview",
+        "english"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "繁體中文版主要專案說明文件，介紹此 AI 網站克隆模板的快速開始、支援平台、技術棧與運作原理等內容。",
+      "tags": [
+        "documentation",
+        "entry-point",
+        "overview"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:components.json",
+      "type": "config",
+      "name": "components.json",
+      "filePath": "components.json",
+      "summary": "shadcn/ui 設定檔，定義 base-nova 樣式、RSC 支援、Tailwind 整合、Lucide 圖示庫，以及 @/components、@/lib 等路徑別名。",
+      "tags": [
+        "configuration",
+        "shadcn-ui",
+        "build-system",
+        "tailwindcss"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "package.json",
+      "summary": "npm 套件清單，宣告 Next.js 16、React 19、Tailwind v4 與 shadcn 等相依套件，並定義 dev、build、lint、typecheck、check 等指令腳本。",
+      "tags": [
+        "configuration",
+        "build-system",
+        "dependencies",
+        "nextjs"
+      ],
+      "complexity": "simple",
+      "languageNotes": "要求 Node >=24，採用 Next.js 16 與 React 19 的最新主版本，check 腳本串接 lint + typecheck + build。"
+    },
+    {
+      "id": "config:tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "tsconfig.json",
+      "summary": "TypeScript 編譯器設定，啟用 strict 嚴格模式並設定 @/* 路徑別名，供 Next.js App Router 專案使用。",
+      "tags": [
+        "configuration",
+        "typescript",
+        "build-system"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.github/ISSUE_TEMPLATE/bug_report.yml",
+      "type": "config",
+      "name": "bug_report.yml",
+      "filePath": ".github/ISSUE_TEMPLATE/bug_report.yml",
+      "summary": "GitHub 結構化問題回報範本，透過 markdown、textarea、dropdown 等表單欄位引導使用者提交錯誤詳情、重現步驟與環境資訊，並自動套用 bug 標籤。",
+      "tags": [
+        "configuration",
+        "issue-template",
+        "github",
+        "bug-report"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "採用 GitHub Issue Forms YAML schema（name/description/labels/body），body 區塊使用 type 為 input/textarea/dropdown/checkboxes 的表單元件。"
+    },
+    {
+      "id": "config:.github/ISSUE_TEMPLATE/config.yml",
+      "type": "config",
+      "name": "config.yml",
+      "filePath": ".github/ISSUE_TEMPLATE/config.yml",
+      "summary": "GitHub 問題範本的整體設定檔，停用空白問題（blank_issues_enabled: false）並提供導向 Discord 社群討論的聯絡連結。",
+      "tags": [
+        "configuration",
+        "issue-template",
+        "github",
+        "community"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.github/ISSUE_TEMPLATE/feature_request.yml",
+      "type": "config",
+      "name": "feature_request.yml",
+      "filePath": ".github/ISSUE_TEMPLATE/feature_request.yml",
+      "summary": "GitHub 結構化功能建議範本，透過表單欄位收集使用者期望的功能、使用情境與替代方案，並自動套用 enhancement 標籤。",
+      "tags": [
+        "configuration",
+        "issue-template",
+        "github",
+        "feature-request"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "遵循 GitHub Issue Forms YAML schema，body 區塊以 textarea 元件收集功能描述與動機。"
+    },
+    {
+      "id": "document:.github/PULL_REQUEST_TEMPLATE.md",
+      "type": "document",
+      "name": "PULL_REQUEST_TEMPLATE.md",
+      "filePath": ".github/PULL_REQUEST_TEMPLATE.md",
+      "summary": "GitHub Pull Request 範本，提供 Summary、Related Issue、Type of Change 與 Checklist 四個區段，引導貢獻者填寫一致的 PR 描述。",
+      "tags": [
+        "documentation",
+        "github",
+        "pull-request",
+        "template"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.github/copilot-instructions.md",
+      "type": "document",
+      "name": "copilot-instructions.md",
+      "filePath": ".github/copilot-instructions.md",
+      "summary": "GitHub Copilot 的代理指示文件，為自動產生的副本（真實來源為 AGENTS.md），彙整專案技術棧、指令、程式碼風格、設計原則與網站逆向工程的檢查指南。",
+      "tags": [
+        "documentation",
+        "github",
+        "copilot",
+        "agent-instructions",
+        "generated"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "此檔為 AGENTS.md 的衍生副本，內容包含 Next.js + shadcn/ui 技術棧與五階段網站檢查流程。"
+    },
+    {
+      "id": "config:.github/copilot-setup-steps.yml",
+      "type": "config",
+      "name": "copilot-setup-steps.yml",
+      "filePath": ".github/copilot-setup-steps.yml",
+      "summary": "定義 GitHub Copilot 代理環境的設定步驟，宣告 Copilot 在執行任務前所需的 setup steps。",
+      "tags": [
+        "configuration",
+        "github",
+        "copilot",
+        "ci-cd"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.amazonq/cli-agents/clone-website.json",
+      "type": "config",
+      "name": "clone-website.json",
+      "filePath": ".amazonq/cli-agents/clone-website.json",
+      "summary": "Amazon Q CLI agent 設定檔，定義 clone-website agent 的名稱、描述、prompt 與 fileContext，由 sync-skills 流程從正規 SKILL.md 產生。",
+      "tags": [
+        "configuration",
+        "ai-agent",
+        "generated",
+        "amazon-q"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.amazonq/rules/project.md",
+      "type": "document",
+      "name": "project.md",
+      "filePath": ".amazonq/rules/project.md",
+      "summary": "Amazon Q 平台的專案規則檔，彙整 Next.js 16 技術棧、程式風格與網站逆向工程指南，由 AGENTS.md 經 sync-agent-rules 產生。",
+      "tags": [
+        "documentation",
+        "agent-rules",
+        "generated",
+        "project-guidelines"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.augment/commands/clone-website.md",
+      "type": "document",
+      "name": "clone-website.md",
+      "filePath": ".augment/commands/clone-website.md",
+      "summary": "Augment 平台的 clone-website 指令文件，描述網站逆向工程的五階段流程（偵察、基礎建置、元件規格與派發、頁面組裝、視覺 QA），由正規 SKILL.md 產生。",
+      "tags": [
+        "documentation",
+        "command",
+        "generated",
+        "workflow",
+        "website-cloning"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:.claude/skills/clone-website/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".claude/skills/clone-website/SKILL.md",
+      "summary": "clone-website skill 的正規來源檔，定義完整的網站逆向工程工作流程與九大指導原則；所有平台的指令／skill 副本皆由此檔透過 sync-skills.mjs 產生。",
+      "tags": [
+        "documentation",
+        "skill",
+        "canonical-source",
+        "workflow",
+        "website-cloning"
+      ],
+      "complexity": "complex",
+      "languageNotes": "此為跨平台 AI agent 模板的單一事實來源（single source of truth），其餘平台檔案皆為其生成副本。"
+    },
+    {
+      "id": "document:.clinerules",
+      "type": "document",
+      "name": ".clinerules",
+      "filePath": ".clinerules",
+      "summary": "Cline 平台的專案規則檔，內容為 AGENTS.md 的生成副本，提供 Next.js 模板的技術棧與逆向工程指南給 Cline agent。",
+      "tags": [
+        "documentation",
+        "agent-rules",
+        "generated",
+        "cline"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.codex/skills/clone-website/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".codex/skills/clone-website/SKILL.md",
+      "summary": "OpenAI Codex 平台的 clone-website skill 文件，為正規 .claude SKILL.md 的生成副本，描述網站逆向工程五階段流程。",
+      "tags": [
+        "documentation",
+        "skill",
+        "generated",
+        "workflow",
+        "website-cloning"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:.continue/commands/clone-website.md",
+      "type": "document",
+      "name": "clone-website.md",
+      "filePath": ".continue/commands/clone-website.md",
+      "summary": "Continue 平台的 clone-website 指令文件，為正規 SKILL.md 的生成副本，定義網站逆向工程的完整工作流程。",
+      "tags": [
+        "documentation",
+        "command",
+        "generated",
+        "workflow",
+        "website-cloning"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:.continue/rules/project.md",
+      "type": "document",
+      "name": "project.md",
+      "filePath": ".continue/rules/project.md",
+      "summary": "Continue 平台的專案規則檔，由 AGENTS.md 產生，提供技術棧、程式風格與網站檢查指南給 Continue agent。",
+      "tags": [
+        "documentation",
+        "agent-rules",
+        "generated",
+        "continue"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.cursor/commands/clone-website.md",
+      "type": "document",
+      "name": "clone-website.md",
+      "filePath": ".cursor/commands/clone-website.md",
+      "summary": "Cursor 平台的 clone-website 指令文件，為正規 SKILL.md 的生成副本，描述網站逆向工程五階段流程。",
+      "tags": [
+        "documentation",
+        "command",
+        "generated",
+        "workflow",
+        "website-cloning"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:.cursor/rules/project.mdc",
+      "type": "document",
+      "name": "project.mdc",
+      "filePath": ".cursor/rules/project.mdc",
+      "summary": "Cursor 平台的規則檔（.mdc 格式），含 frontmatter 與指向 AGENTS.md 內容的專案指南，由 sync-agent-rules 產生。",
+      "tags": [
+        "documentation",
+        "agent-rules",
+        "generated",
+        "cursor"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.gemini/commands/clone-website.toml",
+      "type": "config",
+      "name": "clone-website.toml",
+      "filePath": ".gemini/commands/clone-website.toml",
+      "summary": "Gemini CLI 的 clone-website 指令設定，將正規 SKILL.md 內容包進 TOML 的 prompt 欄位，定義網站逆向工程工作流程。",
+      "tags": [
+        "configuration",
+        "command",
+        "generated",
+        "gemini",
+        "website-cloning"
+      ],
+      "complexity": "complex",
+      "languageNotes": "TOML 格式將整段 Markdown 工作流程嵌入單一 prompt 多行字串欄位中。"
+    },
+    {
+      "id": "document:.gitattributes",
+      "type": "document",
+      "name": ".gitattributes",
+      "filePath": ".gitattributes",
+      "summary": "Git 屬性設定檔，定義特定檔案的行尾處理與 diff／合併行為。",
+      "tags": [
+        "configuration",
+        "git",
+        "version-control"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.github/skills/clone-website/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".github/skills/clone-website/SKILL.md",
+      "summary": "GitHub Copilot 平台的 clone-website skill 文件，為正規 .claude SKILL.md 的生成副本，描述網站逆向工程五階段流程。",
+      "tags": [
+        "documentation",
+        "skill",
+        "generated",
+        "workflow",
+        "website-cloning"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:.nvmrc",
+      "type": "document",
+      "name": ".nvmrc",
+      "filePath": ".nvmrc",
+      "summary": "指定 Node.js 版本的 nvm 設定檔，確保開發環境使用一致的 Node 執行版本。",
+      "tags": [
+        "configuration",
+        "node",
+        "build-system",
+        "environment"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.opencode/commands/clone-website.md",
+      "type": "document",
+      "name": "clone-website.md",
+      "filePath": ".opencode/commands/clone-website.md",
+      "summary": "OpenCode 平台的 clone-website 指令文件，為正規 SKILL.md 的生成副本，定義網站逆向工程完整工作流程。",
+      "tags": [
+        "documentation",
+        "command",
+        "generated",
+        "workflow",
+        "website-cloning"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:.understand-anything/.understandignore",
+      "type": "document",
+      "name": ".understandignore",
+      "filePath": ".understand-anything/.understandignore",
+      "summary": "Understand-Anything 工具的忽略清單，排除不需納入知識圖譜分析的檔案與目錄。",
+      "tags": [
+        "configuration",
+        "tooling",
+        "ignore-list"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.understand-anything/config.json",
+      "type": "config",
+      "name": "config.json",
+      "filePath": ".understand-anything/config.json",
+      "summary": "Understand-Anything 工具的設定檔，指定輸出語言等分析選項。",
+      "tags": [
+        "configuration",
+        "tooling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.windsurf/workflows/clone-website.md",
+      "type": "document",
+      "name": "clone-website.md",
+      "filePath": ".windsurf/workflows/clone-website.md",
+      "summary": "Windsurf 平台的 clone-website workflow 文件，為正規 SKILL.md 的生成副本，描述網站逆向工程五階段流程。",
+      "tags": [
+        "documentation",
+        "workflow",
+        "generated",
+        "windsurf",
+        "website-cloning"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:.windsurfrules",
+      "type": "document",
+      "name": ".windsurfrules",
+      "filePath": ".windsurfrules",
+      "summary": "Windsurf 平台的專案規則檔，由 AGENTS.md 產生，提供專案指南給 Windsurf agent。",
+      "tags": [
+        "documentation",
+        "agent-rules",
+        "generated",
+        "windsurf"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:docs/design-references/.gitkeep",
+      "type": "file",
+      "name": ".gitkeep",
+      "filePath": "docs/design-references/.gitkeep",
+      "summary": "佔位檔，用於在 Git 中保留 docs/design-references 空目錄（存放設計截圖與視覺參考）。",
+      "tags": [
+        "placeholder",
+        "git",
+        "directory-marker"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:docs/research/INSPECTION_GUIDE.md",
+      "type": "document",
+      "name": "INSPECTION_GUIDE.md",
+      "filePath": "docs/research/INSPECTION_GUIDE.md",
+      "summary": "網站檢查指南，以五階段（視覺稽核、元件盤點、版面架構、技術棧分析、文件輸出）說明如何透過瀏覽器逆向工程任何網站。",
+      "tags": [
+        "documentation",
+        "guide",
+        "website-cloning",
+        "research"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:eslint.config.mjs",
+      "type": "config",
+      "name": "eslint.config.mjs",
+      "filePath": "eslint.config.mjs",
+      "summary": "ESLint flat config，套用 Next.js core-web-vitals 與 TypeScript 規則組，規範專案程式碼品質。",
+      "tags": [
+        "configuration",
+        "eslint",
+        "linting",
+        "build-system"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:next.config.ts",
+      "type": "config",
+      "name": "next.config.ts",
+      "filePath": "next.config.ts",
+      "summary": "Next.js 框架設定檔，定義建置與執行階段的應用程式選項。",
+      "tags": [
+        "configuration",
+        "nextjs",
+        "build-system"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:postcss.config.mjs",
+      "type": "config",
+      "name": "postcss.config.mjs",
+      "filePath": "postcss.config.mjs",
+      "summary": "PostCSS 設定檔，啟用 Tailwind CSS v4 plugin 以處理樣式轉換。",
+      "tags": [
+        "configuration",
+        "postcss",
+        "tailwind",
+        "build-system"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:public/images/.gitkeep",
+      "type": "file",
+      "name": ".gitkeep",
+      "filePath": "public/images/.gitkeep",
+      "summary": "佔位檔，用於在 Git 中保留 public/images 空目錄（存放從目標網站下載的圖片）。",
+      "tags": [
+        "placeholder",
+        "git",
+        "directory-marker"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:public/seo/.gitkeep",
+      "type": "file",
+      "name": ".gitkeep",
+      "filePath": "public/seo/.gitkeep",
+      "summary": "目錄佔位檔，用於讓 Git 追蹤空的 public/seo/ 目錄，預留存放 favicon、OG 圖片與 webmanifest 等 SEO 資產。",
+      "tags": [
+        "placeholder",
+        "seo",
+        "assets"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:public/videos/.gitkeep",
+      "type": "file",
+      "name": ".gitkeep",
+      "filePath": "public/videos/.gitkeep",
+      "summary": "目錄佔位檔，用於讓 Git 追蹤空的 public/videos/ 目錄，預留存放從目標網站下載的影片資產。",
+      "tags": [
+        "placeholder",
+        "assets",
+        "media"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:scripts/.gitkeep",
+      "type": "file",
+      "name": ".gitkeep",
+      "filePath": "scripts/.gitkeep",
+      "summary": "目錄佔位檔，用於讓 Git 追蹤 scripts/ 目錄，存放資產下載與同步等輔助腳本。",
+      "tags": [
+        "placeholder",
+        "scripts"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:scripts/sync-agent-rules.sh",
+      "type": "file",
+      "name": "sync-agent-rules.sh",
+      "filePath": "scripts/sync-agent-rules.sh",
+      "summary": "Shell 腳本，從正規來源 AGENTS.md 解析 @import 指令並產生各平台專屬的 agent 指令檔（如 CLAUDE.md 等），確保多平台規則一致。",
+      "tags": [
+        "script",
+        "code-generation",
+        "build-system",
+        "sync"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "使用遞迴的 resolve_imports 函式展開 @import 參照，將模組化的規則檔合併為單一輸出。"
+    },
+    {
+      "id": "function:scripts/sync-agent-rules.sh:resolve_imports",
+      "type": "function",
+      "name": "resolve_imports",
+      "filePath": "scripts/sync-agent-rules.sh",
+      "lineRange": [
+        35,
+        51
+      ],
+      "summary": "遞迴解析來源檔案中的 @import 指令，將被參照的檔案內容就地展開合併。",
+      "tags": [
+        "utility",
+        "recursion",
+        "file-processing"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:scripts/sync-skills.mjs",
+      "type": "file",
+      "name": "sync-skills.mjs",
+      "filePath": "scripts/sync-skills.mjs",
+      "summary": "Node.js 腳本，從正規來源 .claude/skills/clone-website/SKILL.md 產生各平台專屬的 clone-website skill 與 command 副本，保持跨平台同步。",
+      "tags": [
+        "script",
+        "code-generation",
+        "build-system",
+        "sync"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "ESM 模組（.mjs），使用 fs 的 mkdirSync/writeFileSync 寫出衍生檔案。"
+    },
+    {
+      "id": "function:scripts/sync-skills.mjs:write",
+      "type": "function",
+      "name": "write",
+      "filePath": "scripts/sync-skills.mjs",
+      "lineRange": [
+        38,
+        43
+      ],
+      "summary": "將指定內容寫入相對路徑檔案，必要時先遞迴建立父目錄並記錄寫入日誌。",
+      "tags": [
+        "utility",
+        "file-io",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/app/globals.css",
+      "type": "config",
+      "name": "globals.css",
+      "filePath": "src/app/globals.css",
+      "summary": "全域 CSS 樣式，匯入 Tailwind CSS v4 並以 oklch 色彩空間定義 light/dark 兩套 design tokens，作為整個 App 的樣式基礎。",
+      "tags": [
+        "styling",
+        "design-tokens",
+        "tailwind",
+        "configuration",
+        "theme"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "採用 Tailwind v4 的 @theme inline 與 oklch 色彩定義，支援深色模式 design tokens。"
+    },
+    {
+      "id": "file:src/app/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "src/app/layout.tsx",
+      "summary": "Next.js App Router 的 root layout，匯入全域樣式、定義 metadata，並以 RootLayout 包裹所有頁面內容。",
+      "tags": [
+        "entry-point",
+        "layout",
+        "app-router",
+        "metadata"
+      ],
+      "complexity": "simple",
+      "languageNotes": "App Router root layout，匯出 metadata 物件供 Next.js 產生 <head> 內容。"
+    },
+    {
+      "id": "function:src/app/layout.tsx:RootLayout",
+      "type": "function",
+      "name": "RootLayout",
+      "filePath": "src/app/layout.tsx",
+      "lineRange": [
+        20,
+        33
+      ],
+      "summary": "Root layout 元件，建立 html/body 結構並渲染子頁面，是整個 App 的最外層包裝。",
+      "tags": [
+        "component",
+        "layout",
+        "app-router"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/app/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "src/app/page.tsx",
+      "summary": "首頁路由元件，作為 App Router 的入口頁面，於 clone 流程中將被目標網站內容替換的預設樣板。",
+      "tags": [
+        "entry-point",
+        "page",
+        "app-router",
+        "component"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/components/ui/button.tsx",
+      "type": "file",
+      "name": "button.tsx",
+      "filePath": "src/components/ui/button.tsx",
+      "summary": "shadcn/ui 的 Button 元件，使用 class-variance-authority 定義 variant 與 size，並透過 cn() 合併樣式類別。",
+      "tags": [
+        "component",
+        "ui",
+        "shadcn",
+        "button"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "以 cva (class-variance-authority) 定義 buttonVariants 樣式變體，搭配 Radix Slot 支援 asChild。"
+    },
+    {
+      "id": "function:src/components/ui/button.tsx:Button",
+      "type": "function",
+      "name": "Button",
+      "filePath": "src/components/ui/button.tsx",
+      "lineRange": [
+        45,
+        58
+      ],
+      "summary": "Button React 元件，依 variant 與 size 套用對應樣式並透過 cn() 合併 className。",
+      "tags": [
+        "component",
+        "ui",
+        "button"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/hooks/.gitkeep",
+      "type": "file",
+      "name": ".gitkeep",
+      "filePath": "src/hooks/.gitkeep",
+      "summary": "目錄佔位檔，用於讓 Git 追蹤空的 src/hooks/ 目錄，預留存放自訂 React hook。",
+      "tags": [
+        "placeholder",
+        "hook"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/lib/utils.ts",
+      "type": "file",
+      "name": "utils.ts",
+      "filePath": "src/lib/utils.ts",
+      "summary": "提供 shadcn 慣用的 cn() 工具函式，結合 clsx 與 tailwind-merge 智慧合併 Tailwind 類別，供全專案元件共用。",
+      "tags": [
+        "utility",
+        "styling",
+        "tailwind"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/lib/utils.ts:cn",
+      "type": "function",
+      "name": "cn",
+      "filePath": "src/lib/utils.ts",
+      "lineRange": [
+        4,
+        6
+      ],
+      "summary": "合併並去重 Tailwind 類別字串，先以 clsx 組合條件類別再交由 tailwind-merge 解決衝突。",
+      "tags": [
+        "utility",
+        "styling",
+        "tailwind"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/.gitkeep",
+      "type": "file",
+      "name": ".gitkeep",
+      "filePath": "src/types/.gitkeep",
+      "summary": "目錄佔位檔，用於讓 Git 追蹤空的 src/types/ 目錄，預留存放 TypeScript 型別定義介面。",
+      "tags": [
+        "placeholder",
+        "type-definition"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "service:docker-compose.yml",
+      "target": "service:Dockerfile",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "service:docker-compose.yml",
+      "target": "service:Dockerfile:runner",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "service:Dockerfile",
+      "target": "service:Dockerfile:dependencies",
+      "type": "deploys",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "service:Dockerfile",
+      "target": "service:Dockerfile:builder",
+      "type": "deploys",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "service:Dockerfile",
+      "target": "service:Dockerfile:runner",
+      "type": "deploys",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "service:Dockerfile:builder",
+      "target": "service:Dockerfile:dependencies",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "service:Dockerfile:runner",
+      "target": "service:Dockerfile:builder",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "service:.dockerignore",
+      "target": "service:Dockerfile",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "service:Dockerfile.dev",
+      "target": "config:package.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:.aider.conf.yml",
+      "target": "document:AGENTS.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "document:AGENTS.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:GEMINI.md",
+      "target": "document:AGENTS.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:tsconfig.json",
+      "target": "config:package.json",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:components.json",
+      "target": "config:package.json",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:.github/ISSUE_TEMPLATE/config.yml",
+      "target": "config:.github/ISSUE_TEMPLATE/bug_report.yml",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:.github/ISSUE_TEMPLATE/config.yml",
+      "target": "config:.github/ISSUE_TEMPLATE/feature_request.yml",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.github/copilot-instructions.md",
+      "target": "document:AGENTS.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:.amazonq/cli-agents/clone-website.json",
+      "target": "document:.claude/skills/clone-website/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.augment/commands/clone-website.md",
+      "target": "document:.claude/skills/clone-website/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.codex/skills/clone-website/SKILL.md",
+      "target": "document:.claude/skills/clone-website/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.continue/commands/clone-website.md",
+      "target": "document:.claude/skills/clone-website/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.cursor/commands/clone-website.md",
+      "target": "document:.claude/skills/clone-website/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:.gemini/commands/clone-website.toml",
+      "target": "document:.claude/skills/clone-website/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.github/skills/clone-website/SKILL.md",
+      "target": "document:.claude/skills/clone-website/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.opencode/commands/clone-website.md",
+      "target": "document:.claude/skills/clone-website/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.windsurf/workflows/clone-website.md",
+      "target": "document:.claude/skills/clone-website/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.amazonq/rules/project.md",
+      "target": "document:AGENTS.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.continue/rules/project.md",
+      "target": "document:AGENTS.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.clinerules",
+      "target": "document:AGENTS.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.windsurfrules",
+      "target": "document:AGENTS.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.cursor/rules/project.mdc",
+      "target": "document:AGENTS.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.amazonq/rules/project.md",
+      "target": "document:docs/research/INSPECTION_GUIDE.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.continue/rules/project.md",
+      "target": "document:docs/research/INSPECTION_GUIDE.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:scripts/sync-agent-rules.sh",
+      "target": "function:scripts/sync-agent-rules.sh:resolve_imports",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:scripts/sync-skills.mjs",
+      "target": "function:scripts/sync-skills.mjs:write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/layout.tsx",
+      "target": "config:src/app/globals.css",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/app/layout.tsx",
+      "target": "function:src/app/layout.tsx:RootLayout",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/layout.tsx",
+      "target": "function:src/app/layout.tsx:RootLayout",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/components/ui/button.tsx",
+      "target": "file:src/lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/components/ui/button.tsx",
+      "target": "function:src/components/ui/button.tsx:Button",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/ui/button.tsx",
+      "target": "function:src/components/ui/button.tsx:Button",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/components/ui/button.tsx",
+      "target": "function:src/lib/utils.ts:cn",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/lib/utils.ts",
+      "target": "function:src/lib/utils.ts:cn",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/lib/utils.ts",
+      "target": "function:src/lib/utils.ts:cn",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "config:src/app/globals.css",
+      "target": "file:src/app/layout.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:application",
+      "name": "應用程式層",
+      "description": "Next.js 16 App Router 的原始碼，包含路由 (layout.tsx、page.tsx)、shadcn/ui 元件、cn() 工具函式、globals.css design tokens，以及 hooks 與 types 的預留目錄。",
+      "nodeIds": [
+        "config:src/app/globals.css",
+        "file:src/app/layout.tsx",
+        "file:src/app/page.tsx",
+        "file:src/components/ui/button.tsx",
+        "file:src/hooks/.gitkeep",
+        "file:src/lib/utils.ts",
+        "file:src/types/.gitkeep"
+      ]
+    },
+    {
+      "id": "layer:ai-agent-instructions",
+      "name": "AI 代理指令層",
+      "description": "本範本的核心：以 AGENTS.md 與 .claude SKILL.md 為單一權威來源，同步產出至約十個 AI 代理平台 (Cursor、Codex、Continue、Windsurf、Gemini、Amazon Q、Augment、OpenCode、Copilot、Cline) 的 skill、rule 與 command 指令副本，外加網站逆向工程的 INSPECTION_GUIDE。",
+      "nodeIds": [
+        "document:AGENTS.md",
+        "document:.claude/skills/clone-website/SKILL.md",
+        "document:.codex/skills/clone-website/SKILL.md",
+        "document:.github/skills/clone-website/SKILL.md",
+        "document:.amazonq/rules/project.md",
+        "config:.amazonq/cli-agents/clone-website.json",
+        "document:.augment/commands/clone-website.md",
+        "document:.continue/commands/clone-website.md",
+        "document:.continue/rules/project.md",
+        "document:.cursor/commands/clone-website.md",
+        "document:.cursor/rules/project.mdc",
+        "config:.gemini/commands/clone-website.toml",
+        "document:.opencode/commands/clone-website.md",
+        "document:.windsurf/workflows/clone-website.md",
+        "document:.windsurfrules",
+        "document:.clinerules",
+        "document:.github/copilot-instructions.md",
+        "config:.aider.conf.yml",
+        "document:docs/research/INSPECTION_GUIDE.md"
+      ]
+    },
+    {
+      "id": "layer:sync-scripts",
+      "name": "同步腳本層",
+      "description": "將權威 AGENTS.md 與 SKILL.md 內容產生並散佈到各 AI 代理平台的同步產生器 (sync-agent-rules.sh、sync-skills.mjs)，是維持多平台指令一致性的關鍵工具。",
+      "nodeIds": [
+        "file:scripts/sync-agent-rules.sh",
+        "file:scripts/sync-skills.mjs",
+        "file:scripts/.gitkeep"
+      ]
+    },
+    {
+      "id": "layer:build-config",
+      "name": "建構與設定層",
+      "description": "專案的建構工具與框架設定，涵蓋 package.json、tsconfig.json、components.json、next.config.ts、ESLint、PostCSS、Node 版本鎖定、Git 屬性，以及 understand-anything 分析設定。",
+      "nodeIds": [
+        "config:package.json",
+        "config:tsconfig.json",
+        "config:components.json",
+        "config:next.config.ts",
+        "config:eslint.config.mjs",
+        "config:postcss.config.mjs",
+        "document:.nvmrc",
+        "document:.gitattributes",
+        "config:.understand-anything/config.json",
+        "document:.understand-anything/.understandignore"
+      ]
+    },
+    {
+      "id": "layer:infrastructure",
+      "name": "基礎架構層",
+      "description": "容器化與 CI/CD 基礎設施，包含多階段 Dockerfile (dependencies/builder/runner)、開發用 Dockerfile.dev、docker-compose.yml、.dockerignore 與 GitHub Actions CI 流程。",
+      "nodeIds": [
+        "service:Dockerfile",
+        "service:Dockerfile:dependencies",
+        "service:Dockerfile:builder",
+        "service:Dockerfile:runner",
+        "service:Dockerfile.dev",
+        "service:docker-compose.yml",
+        "service:.dockerignore",
+        "pipeline:.github/workflows/ci.yml"
+      ]
+    },
+    {
+      "id": "layer:documentation",
+      "name": "專案文件層",
+      "description": "面向使用者與貢獻者的專案文件，包含中英文 README、CHANGELOG、CLAUDE.md/GEMINI.md 進入點，以及 GitHub issue 與 PR 範本。",
+      "nodeIds": [
+        "document:README.md",
+        "document:README.en.md",
+        "document:CHANGELOG.md",
+        "document:CLAUDE.md",
+        "document:GEMINI.md",
+        "config:.github/ISSUE_TEMPLATE/bug_report.yml",
+        "config:.github/ISSUE_TEMPLATE/config.yml",
+        "config:.github/ISSUE_TEMPLATE/feature_request.yml",
+        "config:.github/copilot-setup-steps.yml",
+        "document:.github/PULL_REQUEST_TEMPLATE.md"
+      ]
+    },
+    {
+      "id": "layer:assets",
+      "name": "資產佔位層",
+      "description": "用於存放從目標網站下載資產的預留目錄佔位檔 (.gitkeep)，涵蓋 public 的 images/seo/videos 與 docs 的 design-references。",
+      "nodeIds": [
+        "file:public/images/.gitkeep",
+        "file:public/seo/.gitkeep",
+        "file:public/videos/.gitkeep",
+        "file:docs/design-references/.gitkeep"
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "專案總覽與克隆理念",
+      "description": "從 README 開始，了解這個模板的核心定位：一個可重複使用的 Next.js 模板，讓 AI 編碼代理把任何網站逆向工程成乾淨的現代程式碼。只要對著一個網址執行 /clone-website，代理就會檢查網站、擷取 design tokens 與資產、撰寫元件規格，再派發平行建置者重建各區段。繁中（README.md）與英文（README.en.md）兩版說明文件描繪了相同的故事，是整趟導覽的起點與地圖。",
+      "nodeIds": [
+        "document:README.md",
+        "document:README.en.md"
+      ]
+    },
+    {
+      "order": 2,
+      "title": "代理指令的單一事實來源",
+      "description": "AGENTS.md 是整個專案最被廣泛依賴的節點（fan-in 高達 9），定義了技術棧、指令、程式風格、設計原則與專案結構，並標註 Next.js 16 的重大變更警告。建立在 Step 1 的願景之上，這份文件是所有 AI 代理共享的「規則書」——後續所有平台的規則檔都從這裡衍生而來。",
+      "nodeIds": [
+        "document:AGENTS.md"
+      ]
+    },
+    {
+      "order": 3,
+      "title": "指標檔如何指向事實來源",
+      "description": "CLAUDE.md 與 GEMINI.md 都是單行指標檔，透過 @AGENTS.md 引用把各自代理的指引導回 Step 2 的事實來源。這個設計避免了規則重複：與其在每個平台維護一份完整指令，不如讓它們全部指向同一份 AGENTS.md，確保一致性。",
+      "nodeIds": [
+        "document:CLAUDE.md",
+        "document:GEMINI.md"
+      ]
+    },
+    {
+      "order": 4,
+      "title": "clone-website 正規工作流程",
+      "description": "這份 SKILL.md 是 clone-website skill 的正規來源檔（fan-in 同樣高達 9），定義了完整的五階段管線：偵察（recon）→ 基礎建置（foundation）→ 元件規格（component specs）→ 在 git worktree 中平行建置（parallel build）→ 組裝與視覺 QA（assemble & QA），以及九大指導原則。它把 Step 1 README 承諾的「對網址執行 /clone-website」轉化為可執行的具體流程。所有平台的指令與 skill 副本都由此檔產生。",
+      "nodeIds": [
+        "document:.claude/skills/clone-website/SKILL.md"
+      ]
+    },
+    {
+      "order": 5,
+      "title": "檢查目標網站的指南",
+      "description": "INSPECTION_GUIDE.md 為 Step 4 管線的第一階段「偵察」提供詳盡的檢查清單，以五階段（視覺稽核、元件盤點、版面架構、技術棧分析、文件輸出）說明檢查任何網站時該擷取什麼：colors、typography、spacing、breakpoints、元件變體與狀態。它把抽象的「逆向工程」變成一份可逐項打勾的稽核流程。",
+      "nodeIds": [
+        "document:docs/research/INSPECTION_GUIDE.md"
+      ]
+    },
+    {
+      "order": 6,
+      "title": "多平台扇出：一份來源、十份副本",
+      "description": "從正規的 SKILL.md（Step 4）出發，sync 流程為近十個平台生成各自格式的 clone-website 副本——Cursor、Codex、Continue、Windsurf、Gemini、Amazon Q、Augment、OpenCode 與 GitHub Copilot 各取所需。這些副本在語意上全部 related 到同一份來源，使用者無論用哪個 AI 工具，都能取得相同的克隆工作流程。",
+      "nodeIds": [
+        "document:.cursor/commands/clone-website.md",
+        "document:.codex/skills/clone-website/SKILL.md",
+        "config:.gemini/commands/clone-website.toml",
+        "config:.amazonq/cli-agents/clone-website.json",
+        "document:.github/skills/clone-website/SKILL.md"
+      ]
+    },
+    {
+      "order": 7,
+      "title": "規則檔的扇出與整合",
+      "description": "對應 Step 6 的 skill 扇出，AGENTS.md（Step 2）也被生成為各平台的專案規則檔：Cline 的 .clinerules、Windsurf 的 .windsurfrules、Cursor 的 .mdc、Copilot 的 instructions，以及 .aider.conf.yml 這類直接讀取 AGENTS.md 與 INSPECTION_GUIDE.md 的整合設定。同一套規則，自動覆蓋整個 AI 工具生態。",
+      "nodeIds": [
+        "document:.clinerules",
+        "document:.windsurfrules",
+        "document:.cursor/rules/project.mdc",
+        "document:.github/copilot-instructions.md",
+        "config:.aider.conf.yml"
+      ]
+    },
+    {
+      "order": 8,
+      "title": "保持同步的生成器腳本",
+      "description": "這兩支腳本是 Step 6 與 Step 7 扇出背後的引擎。sync-skills.mjs 從正規 SKILL.md 產生各平台的 clone-website skill 與 command 副本；sync-agent-rules.sh 解析 AGENTS.md 的 @import 指令並生成各平台的 agent 指令檔。編輯來源後執行它們，所有平台便重新對齊——這正是「單一事實來源」得以維持的關鍵機制。",
+      "nodeIds": [
+        "file:scripts/sync-skills.mjs",
+        "file:scripts/sync-agent-rules.sh"
+      ],
+      "languageLesson": "Node.js 的 .mjs 副檔名表示 ES Module，可使用 import/export 與 top-level await；搭配 shell 腳本分工，分別處理結構化轉換（JS）與檔案層級的文字組裝（bash）。"
+    },
+    {
+      "order": 9,
+      "title": "Next.js App Router 應用骨架",
+      "description": "進入實際被克隆內容填入的程式碼骨架。layout.tsx 是 App Router 的 root layout（也是專案的程式進入點），它 import 全域樣式、定義 metadata 並包裹所有頁面；globals.css 匯入 Tailwind CSS v4 並以 oklch 色彩空間定義 light/dark 兩套 design tokens；page.tsx 則是預設首頁，會在 clone 流程中被目標網站內容替換。這三者構成 Step 5 擷取的 design tokens 最終落腳的地方。",
+      "nodeIds": [
+        "file:src/app/layout.tsx",
+        "config:src/app/globals.css",
+        "file:src/app/page.tsx"
+      ],
+      "languageLesson": "Tailwind CSS v4 改用 CSS-first 設定，透過 @import 與 @theme 直接在 CSS 定義 design tokens；oklch 色彩空間相較 hex/rgb 能提供感知上更均勻的明度與更廣的色域。"
+    },
+    {
+      "order": 10,
+      "title": "shadcn/ui 元件基礎",
+      "description": "承接 Step 9 的設計系統，這是重建 UI 的元件基石。button.tsx 是 shadcn/ui 的 Button，使用 class-variance-authority 定義 variant 與 size，並透過 cn() 合併樣式類別；utils.ts 提供的 cn() 工具結合 clsx 與 tailwind-merge，是全專案元件共用的類別合併函式（button.tsx 直接 import 並 call 它）。平行建置者重建區段時，都以這套模式為範本。",
+      "nodeIds": [
+        "file:src/components/ui/button.tsx",
+        "file:src/lib/utils.ts"
+      ],
+      "languageLesson": "cn() 模式結合 clsx（條件式組合類別）與 tailwind-merge（解決 Tailwind 類別衝突，後者覆蓋前者），是 shadcn/ui 生態的慣用工具函式；class-variance-authority（cva）則以宣告式定義元件的 variant 矩陣。"
+    },
+    {
+      "order": 11,
+      "title": "建構與工具設定",
+      "description": "支撐整個應用的設定層。package.json 宣告 Next.js 16、React 19、Tailwind v4 與 shadcn 等相依套件並定義 dev/build/lint/typecheck/check 指令；tsconfig.json 啟用 strict 嚴格模式與 @/* 路徑別名；components.json 設定 shadcn/ui 的樣式與路徑別名；next.config.ts、eslint.config.mjs、postcss.config.mjs 則分別掌管框架、程式品質與樣式轉換。這些設定把 Step 9-10 的程式碼黏合成可建置的專案。",
+      "nodeIds": [
+        "config:package.json",
+        "config:tsconfig.json",
+        "config:components.json",
+        "config:next.config.ts",
+        "config:postcss.config.mjs"
+      ]
+    },
+    {
+      "order": 12,
+      "title": "容器化與持續整合",
+      "description": "導覽的收尾：把成品打包並守住品質。Dockerfile 採三階段 multi-stage build（dependencies → builder → runner），產出精簡且以非 root 使用者執行的正式映像；docker-compose.yml 同時編排正式（app）與開發（dev）兩個服務；ci.yml 則在 push 與 pull request 時於 GitHub Actions 上依序執行 lint、typecheck 與 build。三者共同確保任何克隆出的網站都能可靠地建置、部署與驗證。",
+      "nodeIds": [
+        "service:Dockerfile",
+        "service:docker-compose.yml",
+        "pipeline:.github/workflows/ci.yml"
+      ],
+      "languageLesson": "Multi-stage Docker build 用多個 FROM 階段分離建置與執行：builder 階段含完整相依套件供編譯，最終 runner 階段只複製 standalone 產物，可將映像縮小 50-80%；以非 root 使用者執行則降低容器逃逸的攻擊面。"
+    }
+  ]
+}

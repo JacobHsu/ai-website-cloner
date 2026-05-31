@@ -148,9 +148,9 @@ docker compose up dev --build # 以開發模式在 port 3001 執行
 每個腳本會自動重新產生平台特定的副本。原生讀取來源檔案的代理不需要重新產生。
 
 
-## Star 歷史
+## 參考
 
-[![Star History Chart](https://api.star-history.com/svg?repos=JCodesMore/ai-website-cloner-template&type=Date)](https://star-history.com/#JCodesMore/ai-website-cloner-template&Date)
+[Understand-Anything](https://github.com/Lum1104/Understand-Anything) ‵/understand --language zh-TW`
 
 ## 授權
 

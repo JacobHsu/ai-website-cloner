@@ -1,0 +1,763 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "eae45317c5cb7e6945cce87f14b401c43e74616d",
+  "generatedAt": "2026-05-31T15:30:21.928Z",
+  "files": {
+    ".aider.conf.yml": {
+      "filePath": ".aider.conf.yml",
+      "contentHash": "ffdacbb0b856d0d7fdb8aa1714b19af0f760ad0d9036649c7931f5cc865180be",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": true
+    },
+    ".amazonq/cli-agents/clone-website.json": {
+      "filePath": ".amazonq/cli-agents/clone-website.json",
+      "contentHash": "67729f61f8d034bcb94b3e08dcf4c6344903f202ded25d8b0340e20d66a4b24d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": true
+    },
+    ".amazonq/rules/project.md": {
+      "filePath": ".amazonq/rules/project.md",
+      "contentHash": "548b5a5dfedd64a3853d74090b753b83039f58ae4ee2fc1452424a3e89ce875f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 148,
+      "hasStructuralAnalysis": true
+    },
+    ".augment/commands/clone-website.md": {
+      "filePath": ".augment/commands/clone-website.md",
+      "contentHash": "afd06b27532053b9ccb971cc14e97f92475e1292f7969e1a65c98f9d82fcaa69",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 475,
+      "hasStructuralAnalysis": true
+    },
+    ".claude/skills/clone-website/SKILL.md": {
+      "filePath": ".claude/skills/clone-website/SKILL.md",
+      "contentHash": "0ad011090c1f27a0e4170239f87cf999f119216fb15efe5e50bf661b2ee0efb6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 474,
+      "hasStructuralAnalysis": true
+    },
+    ".clinerules": {
+      "filePath": ".clinerules",
+      "contentHash": "548b5a5dfedd64a3853d74090b753b83039f58ae4ee2fc1452424a3e89ce875f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 148,
+      "hasStructuralAnalysis": false
+    },
+    ".codex/skills/clone-website/SKILL.md": {
+      "filePath": ".codex/skills/clone-website/SKILL.md",
+      "contentHash": "0ad011090c1f27a0e4170239f87cf999f119216fb15efe5e50bf661b2ee0efb6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 474,
+      "hasStructuralAnalysis": true
+    },
+    ".continue/commands/clone-website.md": {
+      "filePath": ".continue/commands/clone-website.md",
+      "contentHash": "d5feafab78033feb11c54f37aea4af233c87337c2c63afd8bb1729614135e0e6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 476,
+      "hasStructuralAnalysis": true
+    },
+    ".continue/rules/project.md": {
+      "filePath": ".continue/rules/project.md",
+      "contentHash": "c25a94790feb8d77842c58493697b484b4fdda688e5ea9fa0aa6e3ef7b40ab1b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 152,
+      "hasStructuralAnalysis": true
+    },
+    ".cursor/commands/clone-website.md": {
+      "filePath": ".cursor/commands/clone-website.md",
+      "contentHash": "4a1a30b38d90eb7a0daddec17dab6ebff33996a84d9267fd8fc598f0b0a57bcd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 471,
+      "hasStructuralAnalysis": true
+    },
+    ".cursor/rules/project.mdc": {
+      "filePath": ".cursor/rules/project.mdc",
+      "contentHash": "5ee66574c3436ee7405fce0b35acbb9c11ea63b055f4c4274c7c5a59266c2871",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": false
+    },
+    ".dockerignore": {
+      "filePath": ".dockerignore",
+      "contentHash": "9d17890bf9e6ec156973b6f04844704cf93017d1ec793fc986b3650805ffda91",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 61,
+      "hasStructuralAnalysis": false
+    },
+    ".gemini/commands/clone-website.toml": {
+      "filePath": ".gemini/commands/clone-website.toml",
+      "contentHash": "d0f162f1ffb81ef71de8c60433925fc4551e57f1c80740a4986dbc19d3a7f486",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 477,
+      "hasStructuralAnalysis": true
+    },
+    ".gitattributes": {
+      "filePath": ".gitattributes",
+      "contentHash": "a75087ec73a99224be39200cc9d973584aaaacb2ea0410c8215420661c6b2d69",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": false
+    },
+    ".github/copilot-instructions.md": {
+      "filePath": ".github/copilot-instructions.md",
+      "contentHash": "548b5a5dfedd64a3853d74090b753b83039f58ae4ee2fc1452424a3e89ce875f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 148,
+      "hasStructuralAnalysis": true
+    },
+    ".github/copilot-setup-steps.yml": {
+      "filePath": ".github/copilot-setup-steps.yml",
+      "contentHash": "b6270e20778afe3eb8217a718ecf32c5ed5c7a2aaff8eda90cd4dcba057041cc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": true
+    },
+    ".github/ISSUE_TEMPLATE/bug_report.yml": {
+      "filePath": ".github/ISSUE_TEMPLATE/bug_report.yml",
+      "contentHash": "9960fc04d63cd6a68f7d99e50cfc6b28e11a27b4c35d1cffdb938061c63688d6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 87,
+      "hasStructuralAnalysis": true
+    },
+    ".github/ISSUE_TEMPLATE/config.yml": {
+      "filePath": ".github/ISSUE_TEMPLATE/config.yml",
+      "contentHash": "52b9d75ff1cdbd86a8ff59696263c1a30d991a39ccbe019109745a783e2dda1d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 6,
+      "hasStructuralAnalysis": true
+    },
+    ".github/ISSUE_TEMPLATE/feature_request.yml": {
+      "filePath": ".github/ISSUE_TEMPLATE/feature_request.yml",
+      "contentHash": "110c058b71c7b7de9807440007df644b7e0dcb6c9ab90c7d311f91f74e6053f6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 51,
+      "hasStructuralAnalysis": true
+    },
+    ".github/PULL_REQUEST_TEMPLATE.md": {
+      "filePath": ".github/PULL_REQUEST_TEMPLATE.md",
+      "contentHash": "5a19d23deae2118b5e0a2c8453c5062e3cc019ab86a5e0cca7486394e20d4b82",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    ".github/skills/clone-website/SKILL.md": {
+      "filePath": ".github/skills/clone-website/SKILL.md",
+      "contentHash": "0ad011090c1f27a0e4170239f87cf999f119216fb15efe5e50bf661b2ee0efb6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 474,
+      "hasStructuralAnalysis": true
+    },
+    ".github/workflows/ci.yml": {
+      "filePath": ".github/workflows/ci.yml",
+      "contentHash": "0a59b9daab8a0dea886736008af19eef3ed41cda527bff1d1404d40152a8596d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    ".nvmrc": {
+      "filePath": ".nvmrc",
+      "contentHash": "f6bca0e7f46a94bd3349fdb86511cbec4a9091e409b62dd2d6b8c1fdb9a3ce00",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    ".opencode/commands/clone-website.md": {
+      "filePath": ".opencode/commands/clone-website.md",
+      "contentHash": "0ade82e8649d57b173f0145bc8a54f8ea5f323b5cc22424c9dd2aaf106839d8a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 474,
+      "hasStructuralAnalysis": true
+    },
+    ".understand-anything/.understandignore": {
+      "filePath": ".understand-anything/.understandignore",
+      "contentHash": "57ede335b03df539630eeacd68e3f5aa62f40492a13ea6b563f9912304c5bc7d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 43,
+      "hasStructuralAnalysis": false
+    },
+    ".understand-anything/config.json": {
+      "filePath": ".understand-anything/config.json",
+      "contentHash": "0186a6d3810d18e0864cd566137205a89f8920e9c42e22b73f18bb8b6098e45a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 3,
+      "hasStructuralAnalysis": true
+    },
+    ".windsurf/workflows/clone-website.md": {
+      "filePath": ".windsurf/workflows/clone-website.md",
+      "contentHash": "4a1a30b38d90eb7a0daddec17dab6ebff33996a84d9267fd8fc598f0b0a57bcd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 471,
+      "hasStructuralAnalysis": true
+    },
+    ".windsurfrules": {
+      "filePath": ".windsurfrules",
+      "contentHash": "0025f20cc057bc5fb8751c6ff1ee5bae5080a60e25ac71ae1210fc5ec767c973",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 3,
+      "hasStructuralAnalysis": false
+    },
+    "AGENTS.md": {
+      "filePath": "AGENTS.md",
+      "contentHash": "d8ac4df40bf425ccacd18fbc80bfe19e36e6557f033c22406a24cc6af82254df",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 66,
+      "hasStructuralAnalysis": true
+    },
+    "CHANGELOG.md": {
+      "filePath": "CHANGELOG.md",
+      "contentHash": "cbe35f8f20e4aa00badcdbb76f57d3457c2f04263053f4f7f084af49503768a9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 81,
+      "hasStructuralAnalysis": true
+    },
+    "CLAUDE.md": {
+      "filePath": "CLAUDE.md",
+      "contentHash": "d631d88045f74623d568adfb4783b72e3d1b732330d749bc6c72e6648d4581d3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "components.json": {
+      "filePath": "components.json",
+      "contentHash": "55f98c0800df5dbb7a1215f94711437651394ccacdd809dc4f71c3efe926dfc9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 26,
+      "hasStructuralAnalysis": true
+    },
+    "docker-compose.yml": {
+      "filePath": "docker-compose.yml",
+      "contentHash": "03419c552dd3366d21d4f950c26164039ddd4bedc8328a728dcf8a8c85abf86f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 54,
+      "hasStructuralAnalysis": true
+    },
+    "Dockerfile": {
+      "filePath": "Dockerfile",
+      "contentHash": "bfb2e9078c3b49c22ec19bad51aada2c9a13e5e718f5e2a4fa80f7d6d7fd9e31",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 114,
+      "hasStructuralAnalysis": true
+    },
+    "Dockerfile.dev": {
+      "filePath": "Dockerfile.dev",
+      "contentHash": "26642fca5c9ba0306797ba1c677e695044f3cd6bb7f7da3bd2e3fc9393a55e55",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": true
+    },
+    "docs/design-references/.gitkeep": {
+      "filePath": "docs/design-references/.gitkeep",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "docs/research/INSPECTION_GUIDE.md": {
+      "filePath": "docs/research/INSPECTION_GUIDE.md",
+      "contentHash": "13ab0697ad5cd6ace1c4510d3913045570a703229bbc533100b4acc4b1dd0268",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 81,
+      "hasStructuralAnalysis": true
+    },
+    "eslint.config.mjs": {
+      "filePath": "eslint.config.mjs",
+      "contentHash": "275a07c13fc7c83a652efcfa9fb6a207c451a2f5088e6793415ce44281285720",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "eslint/config",
+          "specifiers": [
+            "defineConfig",
+            "globalIgnores"
+          ]
+        },
+        {
+          "source": "eslint-config-next/core-web-vitals",
+          "specifiers": [
+            "nextVitals"
+          ]
+        },
+        {
+          "source": "eslint-config-next/typescript",
+          "specifiers": [
+            "nextTs"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 19,
+      "hasStructuralAnalysis": true
+    },
+    "GEMINI.md": {
+      "filePath": "GEMINI.md",
+      "contentHash": "d631d88045f74623d568adfb4783b72e3d1b732330d749bc6c72e6648d4581d3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "next.config.ts": {
+      "filePath": "next.config.ts",
+      "contentHash": "9172ad6e1e3f22351955468a8585f81cb7c7eab784828ddad068d065ab2125cb",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "next",
+          "specifiers": [
+            "NextConfig"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 9,
+      "hasStructuralAnalysis": true
+    },
+    "package.json": {
+      "filePath": "package.json",
+      "contentHash": "3eb0a30b5b05e8138ed7d48a2b297ea3cfb23772377f3d222643cae248cd20f6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 60,
+      "hasStructuralAnalysis": true
+    },
+    "postcss.config.mjs": {
+      "filePath": "postcss.config.mjs",
+      "contentHash": "7b299d3d3b16699ddda397c0b2373b3af4f25f8fc9ccc9b3d9e64ef083bc1c21",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": true
+    },
+    "public/images/.gitkeep": {
+      "filePath": "public/images/.gitkeep",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "public/seo/.gitkeep": {
+      "filePath": "public/seo/.gitkeep",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "public/videos/.gitkeep": {
+      "filePath": "public/videos/.gitkeep",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "README.en.md": {
+      "filePath": "README.en.md",
+      "contentHash": "ddf58249c8b98462ee6929bab5e87c15401239253bb0312a0131a71ecbb3b699",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 156,
+      "hasStructuralAnalysis": true
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "5cef674d660b4461b70948fbcf2ae4f2249f68dbb582605b8bad5a95dee912f4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 158,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/.gitkeep": {
+      "filePath": "scripts/.gitkeep",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "scripts/sync-agent-rules.sh": {
+      "filePath": "scripts/sync-agent-rules.sh",
+      "contentHash": "a8b2ac7b0d86a35650c7583bb7535a7a423e76cc804a3d9060a07c2e181b92e7",
+      "functions": [
+        {
+          "name": "resolve_imports",
+          "params": [],
+          "exported": false,
+          "lineCount": 17
+        },
+        {
+          "name": "write_file",
+          "params": [],
+          "exported": false,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 89,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/sync-skills.mjs": {
+      "filePath": "scripts/sync-skills.mjs",
+      "contentHash": "5050d47b2210458c18d24e1da8b00c95651fc484bde2f6f6371eafbdbe52a386",
+      "functions": [
+        {
+          "name": "write",
+          "params": [
+            "relPath",
+            "content"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "noArgs",
+          "params": [
+            "text"
+          ],
+          "exported": false,
+          "lineCount": 1
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:fs",
+          "specifiers": [
+            "readFileSync",
+            "writeFileSync",
+            "mkdirSync"
+          ]
+        },
+        {
+          "source": "node:path",
+          "specifiers": [
+            "dirname",
+            "join"
+          ]
+        },
+        {
+          "source": "node:url",
+          "specifiers": [
+            "fileURLToPath"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 112,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/globals.css": {
+      "filePath": "src/app/globals.css",
+      "contentHash": "892e89dc10652d77a3340ba1d66301225482e82bf7d1ada3a1aed3c7d98fc1e4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 130,
+      "hasStructuralAnalysis": false
+    },
+    "src/app/layout.tsx": {
+      "filePath": "src/app/layout.tsx",
+      "contentHash": "a9c75ca215aeec4f812eb67464941a3c05e7e3889a181673446b5868eb78661c",
+      "functions": [
+        {
+          "name": "RootLayout",
+          "params": [
+            "{\r\n  children,\r\n}"
+          ],
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "next",
+          "specifiers": [
+            "Metadata"
+          ]
+        },
+        {
+          "source": "next/font/google",
+          "specifiers": [
+            "Geist",
+            "Geist_Mono"
+          ]
+        },
+        {
+          "source": "./globals.css",
+          "specifiers": []
+        }
+      ],
+      "exports": [
+        "metadata",
+        "RootLayout"
+      ],
+      "totalLines": 34,
+      "hasStructuralAnalysis": true
+    },
+    "src/app/page.tsx": {
+      "filePath": "src/app/page.tsx",
+      "contentHash": "e779dd92017b72d7e2054a7b9b364c11155bf82ff1bc2f691d16b54adde42c78",
+      "functions": [
+        {
+          "name": "Home",
+          "params": [],
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "Home"
+      ],
+      "totalLines": 10,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/button.tsx": {
+      "filePath": "src/components/ui/button.tsx",
+      "contentHash": "d8af2a7cdec17d67f740d367af0804d54802de5cea6471f1ab11259a1442c7fa",
+      "functions": [
+        {
+          "name": "Button",
+          "params": [
+            "{\r\n  className,\r\n  variant = \"default\",\r\n  size = \"default\",\r\n  ...props\r\n}"
+          ],
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@base-ui/react/button",
+          "specifiers": [
+            "ButtonPrimitive"
+          ]
+        },
+        {
+          "source": "class-variance-authority",
+          "specifiers": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Button",
+        "buttonVariants"
+      ],
+      "totalLines": 61,
+      "hasStructuralAnalysis": true
+    },
+    "src/hooks/.gitkeep": {
+      "filePath": "src/hooks/.gitkeep",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "src/lib/utils.ts": {
+      "filePath": "src/lib/utils.ts",
+      "contentHash": "74a147991a119f1c4cdc25a4d9b22713632fa32eb136e55ab6939b006d71b9d6",
+      "functions": [
+        {
+          "name": "cn",
+          "params": [
+            "...inputs"
+          ],
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "clsx",
+          "specifiers": [
+            "clsx",
+            "ClassValue"
+          ]
+        },
+        {
+          "source": "tailwind-merge",
+          "specifiers": [
+            "twMerge"
+          ]
+        }
+      ],
+      "exports": [
+        "cn"
+      ],
+      "totalLines": 7,
+      "hasStructuralAnalysis": true
+    },
+    "src/types/.gitkeep": {
+      "filePath": "src/types/.gitkeep",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "tsconfig.json": {
+      "filePath": "tsconfig.json",
+      "contentHash": "dbacf04aa5f38c1ce4b0f030fbb84e5adff19306fb785b2e4aafef9c58705658",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 35,
+      "hasStructuralAnalysis": true
+    }
+  }
+}
