@@ -10,6 +10,8 @@ Give your AI coding agent a URL and watch it recreate the website as a clean Nex
 
 [Quick Start](#quick-start) · [Watch Demo](#demo) · [Supported Platforms](#supported-platforms)
 
+English · [繁體中文](README.zh.md)
+
 </div>
 
 ---
