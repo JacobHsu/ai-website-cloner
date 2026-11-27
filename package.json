@@ -33,8 +33,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "check": "npm run lint && npm run typecheck && npm run build",
-    "scaffold": "node scripts/scaffold.mjs",
-    "finalize": "node scripts/finalize.mjs"
+    "scaffold": "node scripts/scaffold.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",

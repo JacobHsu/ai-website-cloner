@@ -62,6 +62,6 @@ scripts/            # 素材下載腳本
 ```
 
 ## 代理工作流程
-- 如果 `scripts/scaffold.mjs` 存在，代表這個資料夾是公開模板：不要在這裡複製網站。請向使用者詢問模板以外的輸出資料夾，執行 `npm run scaffold -- <資料夾>`，再到那個資料夾繼續複製。
+- 這個 repo 是公開的複製工具。複製的網站要輸出到另一個資料夾（`/clone-website <網址> --out <資料夾>`），那個資料夾只放網站本身；絕對不要把複製的頁面、素材或研究資料寫進這個 repo，也不要把工具檔複製到輸出資料夾。
 - 要修改複製網站的工作流程，請編輯 `.agents/skills/clone-website/`。它是 Codex、Cursor 與 OpenCode 使用的標準 skill。
 - `.claude/commands/clone-website.md` 只保留為精簡的 Claude Code 橋接，指向標準 skill；不要在那裡重複撰寫工作流程。

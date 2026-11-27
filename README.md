@@ -24,12 +24,12 @@ English · [繁體中文](README.zh.md)
 
 ## Quick Start
 
-> **Rule of thumb: this repo is only the template. Don't clone sites inside it.**
-> Output each cloned site into **its own project folder** (ideally backed by a private repo), so cloned content never ends up in this public template.
+> **The tool is public; your clones stay private.**
+> This repo is the cloning tool and stays public. Each cloned site is written to **a separate output folder** (ideally backed by a private repo) that holds **only the website**, with none of the tool files, and the tool repo never receives cloned content.
 
 The steps below output to `../storemap` as an example.
 
-### 0. Prepare the template (once)
+### 1. Prepare the tool (once)
 
 ```bash
 git clone https://github.com/JacobHsu/ai-website-cloner.git
@@ -37,9 +37,9 @@ cd ai-website-cloner
 npm install
 ```
 
-### 1. Prepare the output project
+### 2. Prepare the output folder
 
-Create an empty folder for the output project. To keep it on GitHub, create a **private** repo first and clone it:
+To keep it on GitHub, create a **private** repo and clone it **outside** the tool folder:
 
 ```bash
 gh repo create <your-account>/storemap --private --add-readme
@@ -48,57 +48,39 @@ git clone git@github.com:<your-account>/storemap.git ../storemap
 
 To keep it local only, an empty folder is enough.
 
-### 2. Scaffold the template into the project
+### 3. Clone from the tool into that folder
 
-From the **template folder**, run:
+Open your agent in the **tool folder** with browser access enabled. In Claude Code or Cursor, run:
 
-```bash
-npm run scaffold -- ../storemap
+```text
+/clone-website https://example.com --out ../storemap
 ```
 
-This copies the app skeleton and the agent setup needed for cloning, and:
+The agent will:
 
-- leaves the target's `.git` and origin alone, so the private repo link is unchanged
-- never overwrites files the target already has (such as its own `README.md`)
-- skips template-only docs (README, CHANGELOG, CONTRIBUTING, and so on)
-- renames `package.json` after the target folder
+1. create the site skeleton with `npm run scaffold -- ../storemap` if the output folder has none, and run `npm install` there
+2. inspect the source site and write pages, components, assets, and research notes into the **output folder**
+3. compare with `npm run dev` and verify with `npm run check` in the output folder
 
-Then install and check in the output project:
+Because the agent reads and writes outside the tool folder, Claude Code may ask you to allow access to the output folder.
+
+### 4. Preview and save
 
 ```bash
 cd ../storemap
-npm install
-npm run check
-```
-
-### 3. Clone a website in the output project
-
-Open the **output project folder** (not the template) in your editor, start a new agent session with browser access enabled, and in Claude Code or Cursor run:
-
-```text
-/clone-website https://example.com
-```
-
-Replace the URL with the website you want to recreate. Preview with `npm run dev` at http://localhost:3000.
-
-### 4. Finalize and save
-
-Once the site looks right, you can strip the cloning-only agent files to leave a plain website project:
-
-```bash
-npm run finalize                    # keeps docs/research and docs/design-references
-npm run finalize -- --drop-research # also removes them
-```
-
-This removes `.agents/`, `.claude/commands/clone-website.md`, `AGENTS.md`, `CLAUDE.md`, and `scripts/`. Afterwards `/clone-website` no longer works in that project, so run it only when you are done cloning. (Running `npm run dev` under an AI agent may let Next.js recreate an `AGENTS.md` containing only its own instructions; set `agentRules: false` in `next.config.ts` to turn that off.)
-
-Then commit and push to your private repo:
-
-```bash
+npm run dev        # preview at http://localhost:3000
 git add -A
 git commit -m "Clone storemap"
-git push
+git push           # goes only to your private repo
 ```
+
+### What the output folder contains
+
+Only a runnable Next.js site: `src/`, `public/`, `package.json` and build config, plus the clone's research notes in `docs/research/` and screenshots in `docs/design-references/`.
+
+It does not get `.agents/`, `.claude/`, `AGENTS.md`, `CLAUDE.md`, `scripts/`, or the tool's README and LICENSE.
+
+You can also create the skeleton yourself with `npm run scaffold -- <folder>`. It leaves the target's `.git` alone and never overwrites existing files.
 
 ## Supported Platforms
 
@@ -176,8 +158,7 @@ npm run build  # Production build
 npm run lint   # ESLint check
 npm run typecheck # TypeScript check
 npm run check  # Run lint + typecheck + build
-npm run scaffold -- <target-folder>  # (in the template) scaffold a separate clone project
-npm run finalize  # (in a clone project) remove the agent tools, leaving a plain site
+npm run scaffold -- <output-folder>  # create the site skeleton in an output folder
 ```
 
 ### If using docker

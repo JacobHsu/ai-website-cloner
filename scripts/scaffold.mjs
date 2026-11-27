@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-// Copy this template's app skeleton and cloning tools into a separate project
-// folder, so cloned sites never land in the template repository.
+// Create the Next.js site skeleton in a separate output folder. Only the
+// website itself goes there: the cloning tools (skill, agent instructions,
+// scripts) stay in this template, which writes into the output folder.
 //
-// Usage (from the template root): npm run scaffold -- <target-folder>
+// Usage (from the template root): npm run scaffold -- <output-folder>
 
 import { execFileSync } from "node:child_process";
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -11,21 +12,25 @@ import { fileURLToPath } from "node:url";
 
 const templateRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-// Template-only files: documentation about the template itself, its demo
-// image, and this script. Everything else tracked by git is copied.
-const EXCLUDED = new Set([
+// Template-only paths: the cloning tools, the template's own docs, and its
+// license (which must not appear to license someone else's cloned content).
+const EXCLUDED_PREFIXES = [".agents/", ".claude/", "scripts/", "docs/"];
+const EXCLUDED_FILES = new Set([
+  "AGENTS.md",
+  "AGENTS.zh.md",
+  "CLAUDE.md",
   "README.md",
   "README.zh.md",
-  "AGENTS.zh.md",
   "CHANGELOG.md",
   "CONTRIBUTING.md",
   "SECURITY.md",
-  "docs/design-references/comparison.png",
-  "scripts/scaffold.mjs",
+  "LICENSE",
+  ".github/PULL_REQUEST_TEMPLATE.md",
 ]);
 
-// package.json fields that describe the template rather than the new project.
+// package.json fields and scripts that describe the template, not the site.
 const TEMPLATE_PACKAGE_FIELDS = ["author", "license", "repository", "homepage", "bugs", "keywords"];
+const TEMPLATE_SCRIPTS = ["scaffold"];
 
 function fail(message) {
   console.error(`scaffold: ${message}`);
@@ -35,6 +40,10 @@ function fail(message) {
 function isInside(child, parent) {
   const relative = path.relative(parent, child);
   return relative === "" || (!relative.startsWith("..") && !path.isAbsolute(relative));
+}
+
+function isExcluded(file) {
+  return EXCLUDED_FILES.has(file) || EXCLUDED_PREFIXES.some((prefix) => file.startsWith(prefix));
 }
 
 function toPackageName(folderName) {
@@ -54,11 +63,11 @@ function writeJson(file, value) {
 }
 
 const targetArg = process.argv[2];
-if (!targetArg) fail("missing target folder. Usage: npm run scaffold -- <target-folder>");
+if (!targetArg) fail("missing output folder. Usage: npm run scaffold -- <output-folder>");
 
 const targetRoot = path.resolve(process.cwd(), targetArg);
 if (isInside(targetRoot, templateRoot)) {
-  fail("the target folder must be outside the template folder.");
+  fail("the output folder must be outside the template folder.");
 }
 
 const trackedFiles = execFileSync("git", ["ls-files", "-z"], { cwd: templateRoot, encoding: "utf8" })
@@ -69,7 +78,7 @@ const copied = [];
 const skipped = [];
 
 for (const file of trackedFiles) {
-  if (EXCLUDED.has(file)) continue;
+  if (isExcluded(file)) continue;
 
   const source = path.join(templateRoot, file);
   if (!existsSync(source)) continue; // tracked but deleted in the working tree
@@ -94,7 +103,7 @@ if (copied.includes("package.json")) {
   pkg.version = "0.1.0";
   pkg.description = "Website clone built with Next.js";
   for (const field of TEMPLATE_PACKAGE_FIELDS) delete pkg[field];
-  delete pkg.scripts?.scaffold;
+  for (const script of TEMPLATE_SCRIPTS) delete pkg.scripts?.[script];
   writeJson(packageFile, pkg);
 }
 
@@ -103,8 +112,8 @@ if (copied.includes("package-lock.json")) {
   const lock = readJson(lockFile);
   lock.name = packageName;
   lock.version = "0.1.0";
-  if (lock.packages?.[""]) {
-    const root = lock.packages[""];
+  const root = lock.packages?.[""];
+  if (root) {
     root.name = packageName;
     root.version = "0.1.0";
     delete root.license;
@@ -112,14 +121,26 @@ if (copied.includes("package-lock.json")) {
   writeJson(lockFile, lock);
 }
 
-console.log(`Scaffolded ${copied.length} files into ${targetRoot}`);
+// Agents run `next dev` in the output folder; keep Next.js from writing an
+// AGENTS.md there; the agent instructions live in the template.
+if (copied.includes("next.config.ts")) {
+  const configFile = path.join(targetRoot, "next.config.ts");
+  const config = readFileSync(configFile, "utf8");
+  const marker = 'output: "standalone",';
+  if (config.includes(marker) && !config.includes("agentRules")) {
+    writeFileSync(configFile, config.replace(marker, `${marker}\n  agentRules: false,`));
+  } else {
+    console.warn("scaffold: could not set agentRules: false in next.config.ts; set it by hand.");
+  }
+}
+
+console.log(`Scaffolded ${copied.length} site files into ${targetRoot}`);
 if (skipped.length > 0) {
-  console.log(`Kept ${skipped.length} existing files in the target unchanged:`);
+  console.log(`Kept ${skipped.length} existing files unchanged:`);
   for (const file of skipped) console.log(`  ${file}`);
 }
 console.log(`
 Next steps:
   cd ${targetArg}
   npm install
-  npm run check
-Then open that folder in your editor and run /clone-website <url> there.`);
+Then, from this template, run: /clone-website <url> --out ${targetArg}`);

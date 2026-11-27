@@ -5,13 +5,21 @@ description: Rebuild existing web pages as working local code, matching their re
 
 # Clone a website
 
-Recreate the supplied pages in the current app. Match the source before adding a new design direction. Deliver working, editable code: screenshots, iframes, and downloaded production bundles are references, not the implementation.
+Recreate the supplied pages in the output app. Match the source before adding a new design direction. Deliver working, editable code: screenshots, iframes, and downloaded production bundles are references, not the implementation.
+
+## 0. Choose the output app
+
+This template is the cloning tool and stays public; cloned sites go into a separate output folder that holds only the website.
+
+- The output folder is the `--out <folder>` argument, or a folder the user names. Without one, ask the user; never write cloned pages, assets, or research into the template.
+- If the output folder has no `package.json`, create the site skeleton from the template root with `npm run scaffold -- <folder>`, then run `npm install` in the output folder.
+- From here on, "the app" means the output app: read and write its files, and run its dev server and checks there. Keep following this template's instructions and code style; do not copy the skill, agent instructions, or scripts into the output.
 
 ## 1. Map the work
 
 Read project instructions, the actual framework/scripts, and existing routes. Open the source URLs with the available browser. Prefer direct HTTP, asset tools, or APIs for extraction when practical; use the browser to establish appearance and behavior.
 
-Record a short source-to-local route map and the files each page owns. Follow the app's conventions; in this template use `src/app/`, `src/components/sites/<site>/`, `public/sites/<site>/`, and `docs/research/<site>/`. Give origins, pages, and downloads distinct names; add a port or URL hash when readable names collide.
+Record a short source-to-local route map and the files each page owns. Follow the app's conventions; in an app scaffolded from this template use `src/app/`, `src/components/sites/<site>/`, `public/sites/<site>/`, and `docs/research/<site>/` (screenshots in `docs/design-references/`). Give origins, pages, and downloads distinct names; add a port or URL hash when readable names collide.
 
 - A first root clone may replace the untouched template homepage.
 - Preserve source pathnames for multiple pages from one origin. Query/fragment variations usually represent states of the same route; reproduce those states.
@@ -58,4 +66,4 @@ Run the project's production check. Completion requires a successful build **and
 
 ## Deliver
 
-Return preview/run instructions, the source-to-local route map, representative desktop/mobile comparisons, checks actually run, and remaining visual/functional gaps. Keep reference clones in separate apps when maintaining the reusable template.
+Return the output folder, preview/run instructions, the source-to-local route map, representative desktop/mobile comparisons, checks actually run, and remaining visual/functional gaps. Confirm the template's git status shows no cloned content.

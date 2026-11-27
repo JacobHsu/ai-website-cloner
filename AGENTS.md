@@ -66,6 +66,6 @@ scripts/            # Asset download scripts
 ```
 
 ## Agent Workflow
-- If `scripts/scaffold.mjs` exists, this folder is the public template: do not clone websites here. Ask the user for an output folder outside the template, run `npm run scaffold -- <folder>`, then continue the clone in that folder.
+- This repo is the public cloning tool. Cloned sites go into a separate output folder (`/clone-website <url> --out <folder>`), which holds only the website; never write cloned pages, assets, or research into this repo, and never copy the tool files into the output.
 - Edit `.agents/skills/clone-website/` for cloning-workflow changes. It is the canonical skill used by Codex, Cursor, and OpenCode.
 - Keep `.claude/commands/clone-website.md` as a thin Claude Code bridge to the canonical skill; do not duplicate the workflow there.
