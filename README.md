@@ -24,27 +24,81 @@ English · [繁體中文](README.zh.md)
 
 ## Quick Start
 
-### 1. Set up your project
+> **Rule of thumb: this repo is only the template. Don't clone sites inside it.**
+> Output each cloned site into **its own project folder** (ideally backed by a private repo), so cloned content never ends up in this public template.
 
-**Recommended: ask your agent.** Paste this into Codex, Claude Code, or your coding agent:
+The steps below output to `../storemap` as an example.
 
-```text
-Set up https://github.com/JCodesMore/ai-website-cloner-template
-as a standalone project in a new folder on my computer.
-Ask me where to put it. Clone the repository, remove its origin remote,
-install dependencies, and run npm run check. Leave it ready for me
-to clone a website.
+### 0. Prepare the template (once)
+
+```bash
+git clone https://github.com/JacobHsu/ai-website-cloner.git
+cd ai-website-cloner
+npm install
 ```
 
-### 2. Clone a website
+### 1. Prepare the output project
 
-Open the project in your agent with browser access enabled. In Claude Code or Cursor, run:
+Create an empty folder for the output project. To keep it on GitHub, create a **private** repo first and clone it:
+
+```bash
+gh repo create <your-account>/storemap --private --add-readme
+git clone git@github.com:<your-account>/storemap.git ../storemap
+```
+
+To keep it local only, an empty folder is enough.
+
+### 2. Scaffold the template into the project
+
+From the **template folder**, run:
+
+```bash
+npm run scaffold -- ../storemap
+```
+
+This copies the app skeleton and the agent setup needed for cloning, and:
+
+- leaves the target's `.git` and origin alone, so the private repo link is unchanged
+- never overwrites files the target already has (such as its own `README.md`)
+- skips template-only docs (README, CHANGELOG, CONTRIBUTING, and so on)
+- renames `package.json` after the target folder
+
+Then install and check in the output project:
+
+```bash
+cd ../storemap
+npm install
+npm run check
+```
+
+### 3. Clone a website in the output project
+
+Open the **output project folder** (not the template) in your editor, start a new agent session with browser access enabled, and in Claude Code or Cursor run:
 
 ```text
 /clone-website https://example.com
 ```
 
-Replace the URL with the website you want to recreate. Once it's built, ask your agent for any changes you want.
+Replace the URL with the website you want to recreate. Preview with `npm run dev` at http://localhost:3000.
+
+### 4. Finalize and save
+
+Once the site looks right, you can strip the cloning-only agent files to leave a plain website project:
+
+```bash
+npm run finalize                    # keeps docs/research and docs/design-references
+npm run finalize -- --drop-research # also removes them
+```
+
+This removes `.agents/`, `.claude/commands/clone-website.md`, `AGENTS.md`, `CLAUDE.md`, and `scripts/`. Afterwards `/clone-website` no longer works in that project, so run it only when you are done cloning. (Running `npm run dev` under an AI agent may let Next.js recreate an `AGENTS.md` containing only its own instructions; set `agentRules: false` in `next.config.ts` to turn that off.)
+
+Then commit and push to your private repo:
+
+```bash
+git add -A
+git commit -m "Clone storemap"
+git push
+```
 
 ## Supported Platforms
 
@@ -122,6 +176,8 @@ npm run build  # Production build
 npm run lint   # ESLint check
 npm run typecheck # TypeScript check
 npm run check  # Run lint + typecheck + build
+npm run scaffold -- <target-folder>  # (in the template) scaffold a separate clone project
+npm run finalize  # (in a clone project) remove the agent tools, leaving a plain site
 ```
 
 ### If using docker

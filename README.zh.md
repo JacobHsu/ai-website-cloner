@@ -24,27 +24,91 @@
 
 ## 快速開始
 
-### 1. 建立你的專案
+> **核心原則：這個 repo 只當模板，不在這裡複製網站。**
+> 每個要複製的網站都輸出到**另一個獨立的專案資料夾**（建議連到私有 repo），複製成果就不會出現在這個公開模板裡。
 
-**推薦做法：交給你的代理。** 把下面這段貼到 Codex、Claude Code 或你使用的程式代理：
+下面以輸出到 `../storemap` 為例。
 
-```text
-把 https://github.com/JCodesMore/ai-website-cloner-template
-設定成我電腦上一個新資料夾裡的獨立專案。
-先問我要放在哪裡。clone 這個 repository、移除它的 origin remote、
-安裝相依套件，並執行 npm run check。完成後讓它處於
-可以開始複製網站的狀態。
+### 0. 準備模板（只需做一次）
+
+```bash
+git clone https://github.com/JacobHsu/ai-website-cloner.git
+cd ai-website-cloner
+npm install
 ```
 
-### 2. 複製網站
+### 1. 準備輸出專案
 
-在你的代理中開啟專案，並啟用瀏覽器存取。在 Claude Code 或 Cursor 中執行：
+建立一個空的資料夾當作輸出專案。如果要保存到 GitHub，建議先建立**私有** repo 再 clone 下來：
+
+```bash
+gh repo create <你的帳號>/storemap --private --add-readme
+git clone git@github.com:<你的帳號>/storemap.git ../storemap
+```
+
+只想留在本機的話，建立一個空資料夾即可。
+
+### 2. 把模板骨架輸出到專案
+
+在**模板資料夾**中執行：
+
+```bash
+npm run scaffold -- ../storemap
+```
+
+這會把網站骨架與複製網站需要的代理設定複製過去，並且：
+
+- 不會動到目標資料夾的 `.git` 與 origin，所以私有 repo 的連結照舊
+- 不會覆蓋目標資料夾已有的檔案（例如它自己的 `README.md`）
+- 不會帶入模板專用的文件（README、CHANGELOG、CONTRIBUTING 等）
+- 把 `package.json` 的名稱改成目標資料夾的名稱
+
+接著到輸出專案安裝並檢查：
+
+```bash
+cd ../storemap
+npm install
+npm run check
+```
+
+### 3. 在輸出專案中複製網站
+
+用編輯器開啟**輸出專案資料夾**（不是模板），開一個新的代理對話，並啟用瀏覽器存取。在 Claude Code 或 Cursor 中執行：
 
 ```text
 /clone-website https://example.com
 ```
 
-把網址換成你想重建的網站。建置完成後，可以再請代理做任何你想要的修改。
+把網址換成你想重建的網站。完成後用 `npm run dev` 預覽，打開 http://localhost:3000 查看。
+
+### 4. 整理並保存成果
+
+確認網站沒問題之後，可以選擇移除只有複製過程才需要的代理工具檔，讓專案變成乾淨的網站專案：
+
+```bash
+npm run finalize
+```
+
+這會移除 `.agents/`、`.claude/commands/clone-website.md`、`AGENTS.md`、`CLAUDE.md` 與 `scripts/`。研究筆記與截圖（`docs/research/`、`docs/design-references/`）預設保留；也要一起移除的話，執行 `npm run finalize -- --drop-research`。
+
+移除後就不能再在這個專案裡執行 `/clone-website`，所以請在確定不再需要複製時才執行。（之後若在 AI 代理中執行 `npm run dev`，Next.js 可能會自動重新建立只含 Next.js 指示的 `AGENTS.md`；這是正常的，可在 `next.config.ts` 設定 `agentRules: false` 關閉。）
+
+最後 commit 並推到你的私有 repo：
+
+```bash
+git add -A
+git commit -m "Clone storemap"
+git push
+```
+
+### 為什麼這樣能保持私有
+
+| 風險 | 怎麼避免 |
+|---|---|
+| 不小心推到公開模板 | 輸出專案的 origin 是你自己的私有 repo，跟模板無關 |
+| `git add -A` 把所有東西加進去 | 只會進輸出專案的 repo |
+| 在 GitHub 上被看到 | 輸出專案的 repo 設為 `--private` |
+| 公開模板被複製內容污染 | 複製都在輸出專案裡進行，模板完全不會變動 |
 
 ## 支援平台
 
@@ -123,6 +187,8 @@ npm run build  # 正式環境建置
 npm run lint   # ESLint 檢查
 npm run typecheck # TypeScript 型別檢查
 npm run check  # 執行 lint + typecheck + build
+npm run scaffold -- <目標資料夾>  # （在模板中）把骨架輸出到另一個專案
+npm run finalize  # （在輸出專案中）移除代理工具檔，變成乾淨的網站專案
 ```
 
 ### 使用 Docker 的話
